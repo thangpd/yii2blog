@@ -3,6 +3,7 @@
  * Date: 9/24/19
  * Time: 4:29 PM
  */
+
 foreach ( $model as $i => $item ):
 	$atl = '';
 	if ( $i % 2 == 0 ) {
@@ -22,7 +23,7 @@ foreach ( $model as $i => $item ):
             <h2><?php echo $item['description']; ?></h2>
             <p><?php echo $item['content']; ?></p>
 			<?php
-			$cat = \backend\models\Category::find( $item['category'] )->limit( 1 )->one();
+
 			if ( empty( $item['category'] ) ) {
 				echo \yii\helpers\Html::a(
 					'Uncategory',
@@ -30,13 +31,12 @@ foreach ( $model as $i => $item ):
 					[ 'class' => 'text-info' ] );
 			} else {
 				echo \yii\helpers\Html::a(
-					$cat->name,
+					$item->categoryHasOne->name,
 					\yii\helpers\Url::to( [
 							'blog/category',
-							'id' => $cat->id
+							'id' => $item['category'],
 						]
 					), [ 'class' => 'text-info' ] );
-
 			}
 			?>
             <p class="read-more">

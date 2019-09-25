@@ -37,7 +37,7 @@ class Blog extends \yii\db\ActiveRecord {
 				],
 			],
 			[
-				'class'         => SluggableBehavior::className(),
+				'class'         => SluggableBehavior::class,
 				'attribute'     => 'title',
 				'slugAttribute' => 'slug',
 				'ensureUnique'  => true,
@@ -113,5 +113,9 @@ class Blog extends \yii\db\ActiveRecord {
 			'created_at'  => 'Created At',
 			'updated_at'  => 'Updated At',
 		];
+	}
+
+	public function getCategoryHasOne() {
+		return $this->hasOne( Category::class, [ 'id' => 'category' ] );
 	}
 }
