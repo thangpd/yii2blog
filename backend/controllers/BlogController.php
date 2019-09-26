@@ -3,6 +3,7 @@
 namespace backend\controllers;
 
 use backend\models\FileUpload;
+use Faker\Provider\File;
 use Yii;
 use backend\models\Blog;
 use backend\models\BlogSearch;
@@ -53,8 +54,11 @@ class BlogController extends Controller {
 	 * @throws NotFoundHttpException if the model cannot be found
 	 */
 	public function actionView( $id ) {
+		$model = $this->findModel( $id );
+
+
 		return $this->render( 'view', [
-			'model' => $this->findModel( $id ),
+			'model' => $model,
 		] );
 	}
 
@@ -64,9 +68,10 @@ class BlogController extends Controller {
 	 * @return mixed
 	 */
 	public function actionCreate() {
+
 		$model    = new Blog();
 		$upload   = new FileUpload();
-		$file_uri = $upload->uploadFile( $model, 'image_url', \Yii::$app->basePath . '/web/uploads/' );
+		$file_uri = $upload->uploadFile( $model, 'image_url' );
 
 
 		if ( $model->load( Yii::$app->request->post() ) ) {
@@ -103,7 +108,7 @@ class BlogController extends Controller {
 		$model  = $this->findModel( $id );
 		$upload = new FileUpload();
 
-		$file_uri = $upload->uploadFile( $model, 'image_url', \Yii::$app->basePath . '/web/uploads/' );
+		$file_uri = $upload->uploadFile( $model, 'image_url' );
 
 		if ( $model->load( Yii::$app->request->post() ) ) {
 			if ( ! empty( $file_uri ) ) {
@@ -133,7 +138,10 @@ class BlogController extends Controller {
 	 * @throws NotFoundHttpException if the model cannot be found
 	 */
 	public function actionDelete( $id ) {
-		$this->findModel( $id )->delete();
+		$model = $this->findModel( $id );
+		$model->delete();
+
+		FileUpload::deleteFile( $model, 'image_url' );
 
 		return $this->redirect( [ 'index' ] );
 	}
