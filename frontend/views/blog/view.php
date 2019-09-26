@@ -23,11 +23,10 @@ echo \yii\widgets\DetailView::widget( [
 		[
 			'attribute' => 'category',
 			'value'     => function ( $model ) {
-				$cat = \backend\models\Category::find( $model->category )->limit( 1 )->one();
 				if ( empty( $model->category ) ) {
 					return \yii\helpers\Html::a( 'Uncategory', \yii\helpers\Url::to( [ 'blog/category' ] ) );
 				} else {
-					return \yii\helpers\Html::a( $cat->name, \yii\helpers\Url::to( [
+					return \yii\helpers\Html::a( $model->categoryHasOne->name, \yii\helpers\Url::to( [
 						'blog/category',
 						'id' => $model->category
 					] ) );

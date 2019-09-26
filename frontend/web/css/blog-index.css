@@ -1,0 +1,12 @@
+#blog-pjax .button-layout {
+    display: inline-block;
+    float: right;
+}
+
+#blog-pjax .summary {
+    display: inline-block;
+}
+
+#blog-pjax .item {
+    margin-top: 30px;
+}

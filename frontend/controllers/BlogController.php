@@ -9,13 +9,27 @@ namespace frontend\controllers;
 
 use backend\models\Blog;
 use backend\models\Category;
+use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 
 class BlogController extends Controller {
 
 	public function actionIndex() {
 
-		return $this->render( 'index' );
+
+		$dataProvider = new ActiveDataProvider( [
+			'query'      => Blog::find(),
+			'pagination' => [
+				'pageSize' => 5,
+			],
+		] );
+		$get          = \Yii::$app->request->get();
+		$layout       = 'listview';
+		if ( isset( $get['layout'] ) ) {
+			$layout = $get['layout'];
+		}
+
+		return $this->render( 'index', [ 'dataProvider' => $dataProvider, 'layout' => $layout ] );
 	}
 
 	public function actionView() {
