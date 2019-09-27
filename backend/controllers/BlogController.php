@@ -110,7 +110,7 @@ class BlogController extends Controller {
 
 		$file_uri = $upload->uploadFile( $model, 'image_url' );
 
-		if ( $model->load( Yii::$app->request->post() ) ) {
+		if ( $model->load( Yii::$app->request->post() ) && $model->validate() ) {
 			if ( ! empty( $file_uri ) ) {
 				$model->image_url = $file_uri;
 			}
