@@ -37,6 +37,7 @@ class m190923_083006_blog extends Migration {
 			'content'     => $this->text(),
 			'image_url'   => $this->string(),
 			'category'    => $this->integer()->defaultValue( 0 ),
+			'post_type'   => $this->string()->unique()->notNull(),
 			'created_at'  => $this->integer( 11 )->notNull(),
 			'updated_at'  => $this->integer( 11 )->notNull(),
 		], $tableOptions );

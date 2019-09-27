@@ -66,11 +66,10 @@ class Category extends \yii\db\ActiveRecord {
 	 */
 	public function rules() {
 		return [
-			[ [ 'name', 'status', ], 'required' ],
-			[ [ 'parent', 'status', ], 'integer' ],
+			[ [ 'name', ], 'required' ],
+			[ [ 'parent' ], 'integer' ],
 			[ [ 'created_at', 'updated_at' ], 'safe' ],
 			[ [ 'name', 'slug' ], 'string', 'max' => 255 ],
-			[ 'status', 'boolean' ],
 			[ [ 'slug' ], 'unique' ],
 		];
 	}
@@ -84,11 +83,8 @@ class Category extends \yii\db\ActiveRecord {
 			'name'       => 'Name',
 			'slug'       => 'Slug',
 			'parent'     => 'Parent',
-			'status'     => 'Status',
 			'created_at' => 'Created At',
 			'updated_at' => 'Updated At',
 		];
 	}
-
-
 }

@@ -54,16 +54,6 @@ echo \yii\grid\GridView::widget( [
 			}
 		],
 		[
-			'attribute' => 'status',
-			'value'     => function ( $dataProvider, $key, $index, $column ) {
-				if ( $dataProvider->status == 1 ) {
-					return 'Active';
-				} else {
-					return 'Deactive';
-				}
-			}
-		],
-		[
 			'attribute' => 'created_at',
 			'format'    => 'datetime'
 		]

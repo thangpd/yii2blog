@@ -57,6 +57,7 @@ class Blog extends \yii\db\ActiveRecord implements BlogInterface {
 				'slugAttribute' => 'slug',
 				'ensureUnique'  => true,
 			],
+
 		];
 
 	}
