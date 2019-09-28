@@ -23,8 +23,8 @@ echo \yii\helpers\Html::a( 'Delete', [ 'category/delete', 'id' => $model->id ], 
 
 
 echo \yii\widgets\DetailView::widget( [
-	'model' => $model,
-	'attributes' => [ 'id', 'name', 'parent', 'slug', 'status', 'created_at:datetime', 'updated_at:datetime' ],
+	'model'      => $model,
+	'attributes' => [ 'id', 'name', 'parent', 'slug', 'post_type', 'created_at:datetime', 'updated_at:datetime' ],
 ] );
 
 

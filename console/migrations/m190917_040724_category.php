@@ -35,7 +35,7 @@ class m190917_040724_category extends Migration {
 			'name'       => $this->string()->notNull(),
 			'slug'       => $this->string()->notNull()->unique(),
 			'parent'     => $this->integer()->defaultValue( 0 ),
-			'post_type'  => $this->string()->notNull()->unique(),
+			'post_type'  => $this->string()->notNull(),
 			'created_at' => $this->integer( 11 )->notNull(),
 			'updated_at' => $this->integer( 11 )->notNull(),
 		], $tableOptions );

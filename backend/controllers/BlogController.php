@@ -3,15 +3,12 @@
 namespace backend\controllers;
 
 use backend\models\FileUpload;
-use Faker\Provider\File;
 use Yii;
 use backend\models\Blog;
 use backend\models\BlogSearch;
-use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\web\UploadedFile;
 
 /**
  * BlogController implements the CRUD actions for Blog model.
@@ -83,10 +80,6 @@ class BlogController extends Controller {
 			}
 
 			return $this->redirect( [ 'view', 'id' => $model->id ] );
-		} else {
-			echo '<pre>';
-			print_r( $model->getErrors() );
-			echo '</pre>';
 		}
 
 

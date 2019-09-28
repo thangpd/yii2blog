@@ -7,7 +7,7 @@
 namespace common\interfaces;
 
 
-interface BlogInterface {
+interface PostTypeInterface {
 	function postTypeName();
 }
 
