@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Blog */
+/* @var $model backend\models\BlogModel */
 /* @var $form yii\widgets\ActiveForm */
 
 $category = new \backend\models\Category();

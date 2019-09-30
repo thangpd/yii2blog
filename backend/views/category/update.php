@@ -5,10 +5,13 @@
  */
 
 
-echo '<h1>Update Category</h1>';
+echo '<h1>Update ' . $model->getLabelName() . '</h1>';
 
+$parse_request = Yii::$app->urlManager->parseRequest( Yii::$app->request );
+
+$action_id                   = substr( $parse_request[0], 0, strpos( $parse_request[0], "/" ) );
 $this->params['breadcrumbs'] = [
-	[ 'label' => 'Category Index', 'url' => [ 'category/index' ] ],
+	[ 'label' => $model->getLabelName() . ' Index', 'url' => [ $action_id . '/index' ] ],
 	[ 'label' => 'Update' ]
 ];
 

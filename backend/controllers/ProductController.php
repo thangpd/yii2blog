@@ -6,14 +6,61 @@
 
 namespace backend\controllers;
 
-use yii\web\Controller;
+use backend\models\Product;
+use backend\models\ProductCat;
+use common\abstracts\BlogControllerAbstract;
+use yii\filters\VerbFilter;
 
-class ProductController extends Controller {
+class ProductController extends BlogControllerAbstract {
+	/**
+	 * {@inheritdoc}
+	 */
+	public function behaviors() {
+		return [
+			'verbs' => [
+				'class'   => VerbFilter::className(),
+				'actions' => [
+					'delete' => [ 'POST' ],
+				],
+			],
+		];
+	}
+
+	public function postTypeName() {
+		// TODO: Implement postTypeName() method.
+		return 'product';
+	}
 
 
+	public function getLabelName() {
+		// TODO: Implement getLabelName() method.
+		return 'Product';
+	}
+
+	public function getModelName() {
+		return Product::class;
+	}
+
+	public function actionIndex() {
 
 
+		return $this->render( 'index', [ 'model' => $this->model, 'dataProvider' => $this->dataProvider ] );
+	}
 
+	public function actionCreate() {
+
+
+		return $this->render( 'create', [ 'model' => $this->model, 'category' => $this->modelCategory ] );
+	}
 
 
 }
+
+
+
+
+
+
+
+
+

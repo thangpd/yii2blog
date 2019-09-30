@@ -13,20 +13,17 @@ use yii\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 
-class CategoryAbstract implements PostTypeInterface {
+abstract class CategoryModelAbstract extends ActiveRecord {
 
-	public function getParents( $self = '' ) {
-		$res  = [];
-		$data = Category::find()->where( [ 'not in', 'id', $self ] )->all();
-		if ( ! empty( $data ) ) {
-			foreach ( $data as $item ) {
-				$res[ $item->id ] = $item->name;
-			}
+	protected static $post_type = '';
 
-			return $res;
-		} else {
-			return [];
-		}
+
+	abstract public function getDataProvider();
+
+	abstract public function getLabelName();
+
+	public function postTypeName() {
+		return self::$post_type;
 	}
 
 
@@ -83,5 +80,5 @@ class CategoryAbstract implements PostTypeInterface {
 		];
 	}
 
-	abstract function postTypeName();
+
 }

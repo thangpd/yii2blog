@@ -4,16 +4,16 @@
  * Time: 2:22 PM
  */
 
-echo '<h1>Category Index</h1>';
+echo '<h1>' . $label . ' Index</h1>';
 
-echo \yii\helpers\Html::a( 'Create', [ 'category/create' ], [ 'class' => 'btn btn-success' ] );
 
 $this->params['breadcrumbs'] = [
 	[
-		'label' => 'Category Index',
+		'label' => $label . ' Index',
 	]
 ];
 
+echo $btn_create;
 echo \yii\grid\GridView::widget( [
 	'dataProvider' => $dataProvider,
 	'columns'      => [
@@ -53,6 +53,7 @@ echo \yii\grid\GridView::widget( [
 				}
 			}
 		],
+		'post_type',
 		[
 			'attribute' => 'created_at',
 			'format'    => 'datetime'

@@ -38,8 +38,8 @@ echo \yii\widgets\DetailView::widget( [
 	],
 ] );
 
-$next_blog_id = \backend\models\Blog::getNextBlogId( $model->id );
-$prev_blog_id = \backend\models\Blog::getPreviousBlogId( $model->id );
+$next_blog_id = \backend\models\BlogModel::getNextBlogId( $model->id );
+$prev_blog_id = \backend\models\BlogModel::getPreviousBlogId( $model->id );
 
 if ( $prev_blog_id ) {
 	echo \yii\helpers\Html::a( 'Previous Blog', [

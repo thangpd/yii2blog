@@ -7,7 +7,7 @@
 namespace frontend\controllers;
 
 
-use backend\models\Blog;
+use backend\models\BlogModel;
 use backend\models\Category;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
@@ -18,7 +18,7 @@ class BlogController extends Controller {
 
 
 		$dataProvider = new ActiveDataProvider( [
-			'query'      => Blog::find(),
+			'query'      => BlogModel::find(),
 			'pagination' => [
 				'pageSize' => 5,
 			],
@@ -41,13 +41,13 @@ class BlogController extends Controller {
 		}
 
 
-		$model = Blog::find()->where( [ 'slug' => $get['slug'] ] )->limit( 1 )->one();
+		$model = BlogModel::find()->where( [ 'slug' => $get['slug'] ] )->limit( 1 )->one();
 
 		return $this->render( 'view', [ 'model' => $model ] );
 	}
 
 	public function actionCategory( $id = 0 ) {
-		$blog_model = Blog::getCategoryBlog( $id );
+		$blog_model = BlogModel::getCategoryBlog( $id );
 		$cat_model  = Category::find( $id )->limit( 1 )->one();
 
 		return $this->render( 'category', [ 'blog_model' => $blog_model, 'cat_model' => $cat_model ] );

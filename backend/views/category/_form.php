@@ -13,11 +13,10 @@ echo $form->field( $model, 'name' )->input( 'text', [ 'value' => $model->name ] 
 //echo $form->field( $model, 'status' )->input( 'number', [ 'value' => $model->status ] );
 //echo $form->field( $model, 'status' )->widget( \kartik\switchinput\SwitchInput::classname(), [] );
 //echo $form->field( $model, 'parent' )->input( 'number', [ 'value' => $model->parent ] );
-$catmodel = new \backend\models\Category();
-$get      = Yii::$app->request->get();
-$catself  = isset( $get['id'] ) ? $get['id'] : '';
+$get     = Yii::$app->request->get();
+$catself = isset( $get['id'] ) ? $get['id'] : '';
 echo $form->field( $model, 'parent' )->dropDownList(
-	$catmodel->getParents( $catself ), [ 'prompt' => 'Parent Menu' ]
+	$model->getParents( $catself ), [ 'prompt' => 'Parent Menu' ]
 );
 
 echo \yii\helpers\Html::submitButton( 'Update', [ 'class' => 'btn btn-xl btn-success' ] );

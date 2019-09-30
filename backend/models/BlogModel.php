@@ -2,7 +2,7 @@
 
 namespace backend\models;
 
-use common\abstracts\BlogAbtract;
+use common\abstracts\BlogModelAbtract;
 use common\interfaces\PostTypeInterface;
 use Yii;
 use yii\behaviors\SluggableBehavior;
@@ -21,7 +21,7 @@ use yii\db\ActiveRecord;
  * @property int $created_at
  * @property int $updated_at
  */
-class Blog extends BlogAbtract {
+class BlogModel extends BlogModelAbtract {
 
 
 	public function postTypeName() {
@@ -29,4 +29,8 @@ class Blog extends BlogAbtract {
 	}
 
 
+	public function postTypeCategory() {
+		return Category::class;
+		// TODO: Implement postTypeCategory() method.
+	}
 }

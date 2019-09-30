@@ -4,12 +4,12 @@ namespace backend\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\Blog;
+use backend\models\BlogModel;
 
 /**
  * BlogSearch represents the model behind the search form of `backend\models\Blog`.
  */
-class BlogSearch extends Blog {
+class BlogSearch extends BlogModel {
 	/**
 	 * {@inheritdoc}
 	 */
@@ -36,7 +36,7 @@ class BlogSearch extends Blog {
 	 * @return ActiveDataProvider
 	 */
 	public function search( $params ) {
-		$query = Blog::find();
+		$query = BlogModel::find();
 
 		// add conditions that should always apply here
 

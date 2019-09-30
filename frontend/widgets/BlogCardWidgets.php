@@ -6,7 +6,7 @@
 
 namespace frontend\widgets;
 
-use backend\models\Blog;
+use backend\models\BlogModel;
 use yii\base\Exception;
 use yii\helpers\ArrayHelper;
 
