@@ -22,6 +22,8 @@ abstract class BlogModelAbtract extends \yii\db\ActiveRecord {
 		return self::find()->where( [ 'post_type' => self::$post_type ] );
 	}
 
+	abstract public function getLabelName();
+
 	abstract public function postTypeName();
 
 	abstract public function postTypeCategory();
@@ -99,10 +101,7 @@ abstract class BlogModelAbtract extends \yii\db\ActiveRecord {
 			[ [ 'title' ], 'required' ],
 			[ 'post_type', 'default', 'value' => $this->postTypeName() ],
 			[ [ 'description', 'content' ], 'string' ],
-			[ [ 'category', 'created_at', 'updated_at' ], 'integer' ],
-			[ [ 'title' ], 'string', 'max' => 255 ],
-			[ [ 'slug' ], 'string', 'max' => 100 ],
-			[ [ 'image_url' ], 'file', 'extensions' => 'jpg, gif, jpeg,png' ],
+
 		];
 	}
 
@@ -116,17 +115,12 @@ abstract class BlogModelAbtract extends \yii\db\ActiveRecord {
 			'slug'        => 'Slug',
 			'post_type'   => 'Post Type',
 			'description' => 'Description',
-			'content'     => 'Content',
-			'category'    => 'Category',
-			'image_url'   => 'Image Url',
-			'created_at'  => 'Created At',
-			'updated_at'  => 'Updated At',
 		];
 	}
 
 
 	function getCategoryHasOne() {
-		return $this->hasOne( Category::class, [ 'id' => 'category', 'post_type' => 'post_type' ] );
+		return $this->hasOne( $this->postTypeCategory(), [ 'id' => 'category', 'post_type' => 'post_type' ] );
 	}
 
 }

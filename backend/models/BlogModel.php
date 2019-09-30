@@ -33,4 +33,21 @@ class BlogModel extends BlogModelAbtract {
 		return Category::class;
 		// TODO: Implement postTypeCategory() method.
 	}
+
+	public function getLabelName() {
+		return 'Blog';
+		// TODO: Implement getLabelName() method.
+	}
+
+	public function rules() {
+		$parent = parent::rules();
+
+		return array_merge( $parent, [
+			[ [ 'category' ], 'integer' ],
+			[ [ 'title' ], 'string', 'max' => 255 ],
+			[ [ 'slug' ], 'string', 'max' => 100 ],
+			[ [ 'image_url' ], 'file', 'extensions' => 'jpg, gif, jpeg,png' ],
+		] );
+	}
+
 }

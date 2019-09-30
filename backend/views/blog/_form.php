@@ -7,7 +7,6 @@ use yii\widgets\ActiveForm;
 /* @var $model backend\models\BlogModel */
 /* @var $form yii\widgets\ActiveForm */
 
-$category = new \backend\models\Category();
 
 ?>
 

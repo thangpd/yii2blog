@@ -7,6 +7,7 @@
 namespace common\abstracts;
 
 
+use backend\models\FileUpload;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 
@@ -18,6 +19,7 @@ abstract class BlogControllerAbstract extends Controller {
 	public $model;
 	public $modelName;
 	protected $modelCategory;
+	protected $modelLableName;
 	public $dataProvider;
 
 
@@ -27,10 +29,14 @@ abstract class BlogControllerAbstract extends Controller {
 
 	abstract public function getLabelName();
 
+	abstract public function postTypeCategory();
+
 	public function init() {
 		$this->modelName = $this->getModelName();
 
 		$this->model = new $this->modelName();
+
+		$this->modelLableName = $this->model->getLabelName();
 
 		//get postTypeCategory
 		$postTypeCategory    = call_user_func( [ $this->model, 'postTypeCategory' ] );
@@ -48,21 +54,6 @@ abstract class BlogControllerAbstract extends Controller {
 	}
 
 	/**
-	 * Lists all Blog models.
-	 * @return mixed
-	 */
-	public function actionIndex() {
-
-		$searchModel  = new BlogSearch();
-		$dataProvider = $searchModel->search( Yii::$app->request->queryParams );
-
-		return $this->render( 'index', [
-			'searchModel'  => $searchModel,
-			'dataProvider' => $dataProvider,
-		] );
-	}
-
-	/**
 	 * Displays a single Blog model.
 	 *
 	 * @param integer $id
@@ -71,13 +62,31 @@ abstract class BlogControllerAbstract extends Controller {
 	 * @throws NotFoundHttpException if the model cannot be found
 	 */
 	public function actionView( $id ) {
+
 		$model = $this->findModel( $id );
 
 
-		return $this->render( 'view', [
+		return $this->render( '@backend/views/blog/view', [
 			'model' => $model,
 		] );
 	}
+
+	/**
+	 * Lists all Blog models.
+	 * @return mixed
+	 */
+	public function actionIndex() {
+
+//		$searchModel  = new BlogSearch();
+//		$dataProvider = $searchModel->search( Yii::$app->request->queryParams );
+		return $this->render( '@backend/views/blog/index', [
+			'model'        => $this->model,
+			'category'     => $this->modelCategory,
+//			'searchModel'  => $searchModel,
+			'dataProvider' => $this->dataProvider,
+		] );
+	}
+
 
 	/**
 	 * Creates a new Blog model.
@@ -86,25 +95,29 @@ abstract class BlogControllerAbstract extends Controller {
 	 */
 	public function actionCreate() {
 
-		$model    = new BlogModel();
 		$upload   = new FileUpload();
-		$file_uri = $upload->uploadFile( $model, 'image_url' );
+		$file_uri = $upload->uploadFile( $this->model, 'image_url' );
 
 
-		if ( $model->load( Yii::$app->request->post() ) ) {
+		if ( $this->model->load( Yii::$app->request->post() ) ) {
 			if ( ! empty( $file_uri ) ) {
-				$model->image_url = $file_uri;
+				$this->model->image_url = $file_uri;
 			}
-			if ( $model->save() ) {
+			if ( $this->model->save() ) {
 				Yii::$app->session->addFlash( 'success', "Update succeed" );
+			} else {
+//				echo '<pre>';
+//				print_r( $this->model->getErrors() );
+//				echo '</pre>';
 			}
 
-			return $this->redirect( [ 'view', 'id' => $model->id ] );
+			return $this->redirect( [ 'view', 'id' => $this->model->id ] );
 		}
 
 
-		return $this->render( 'create', [
-			'model' => $model,
+		return $this->render( '@backend/views/blog/create', [
+			'model'    => $this->model,
+			'category' => $this->modelCategory,
 		] );
 	}
 
@@ -118,6 +131,7 @@ abstract class BlogControllerAbstract extends Controller {
 	 * @throws NotFoundHttpException if the model cannot be found
 	 */
 	public function actionUpdate( $id ) {
+
 		$model  = $this->findModel( $id );
 		$upload = new FileUpload();
 
@@ -133,11 +147,12 @@ abstract class BlogControllerAbstract extends Controller {
 
 			return $this->redirect( [ 'view', 'id' => $model->id ] );
 		} else {
-			var_dump( $model->getErrors() );
+//			var_dump( $model->getErrors() );
 		}
 
-		return $this->render( 'update', [
-			'model' => $model,
+		return $this->render( '@backend/views/blog/update', [
+			'model'    => $model,
+			'category' => $this->modelCategory,
 		] );
 	}
 
@@ -159,6 +174,7 @@ abstract class BlogControllerAbstract extends Controller {
 		return $this->redirect( [ 'index' ] );
 	}
 
+
 	/**
 	 * Finds the Blog model based on its primary key value.
 	 * If the model is not found, a 404 HTTP exception will be thrown.
@@ -169,19 +185,52 @@ abstract class BlogControllerAbstract extends Controller {
 	 * @throws NotFoundHttpException if the model cannot be found
 	 */
 	protected function findModel( $id ) {
-		if ( ( $model = BlogModel::findOne( $id ) ) !== null ) {
+		if ( ( $model = call_user_func( [ $this->getModelName(), 'findOne' ], $id ) ) !== null ) {
 			return $model;
 		}
 
 		throw new NotFoundHttpException( 'The requested page does not exist.' );
 	}
 
+	public function convertIdCategory( $model ) {
+		if ( isset( $model->category ) ) {
+			return $model->categoryHasOne->name;
+		} else {
+			return '----';
+		}
+	}
 
-
-
-
-
-
-
+	public function renderIndex() {
+		return yii\grid\GridView::widget( [
+			'dataProvider' => $this->dataProvider,
+			'columns'      => [
+				[ 'class' => 'yii\grid\SerialColumn' ],
+				'id',
+				'title',
+				'slug',
+				[
+					'attribute' => 'category',
+					'value'     => function ( $model ) {
+						return $this->convertIdCategory( $model );
+					},
+				],
+				'description:ntext',
+				'content:ntext',
+				[
+					'attribute' => 'image_url',
+					'format'    => 'raw',
+					'value'     => function ( $model ) {
+						if ( isset( $model->image_url ) && ! empty( $model->image_url ) ) {
+							return yii\helpers\Html::img( $model->image_url, [ 'width' => 100 ] );
+						} else {
+							return '';
+						}
+					}
+				],
+				'post_type',
+				[ 'class' => 'yii\grid\ActionColumn' ],
+			],
+		] );
+	}
 
 }

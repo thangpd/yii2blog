@@ -12,6 +12,8 @@ use common\abstracts\BlogControllerAbstract;
 use yii\filters\VerbFilter;
 
 class ProductController extends BlogControllerAbstract {
+
+
 	/**
 	 * {@inheritdoc}
 	 */
@@ -41,26 +43,16 @@ class ProductController extends BlogControllerAbstract {
 		return Product::class;
 	}
 
-	public function actionIndex() {
-
-
-		return $this->render( 'index', [ 'model' => $this->model, 'dataProvider' => $this->dataProvider ] );
+	public function postTypeCategory() {
+		// TODO: Implement postTypeCategory() method.
+		return ProductCat::class;
 	}
 
-	public function actionCreate() {
 
 
-		return $this->render( 'create', [ 'model' => $this->model, 'category' => $this->modelCategory ] );
-	}
+
 
 
 }
-
-
-
-
-
-
-
 
 

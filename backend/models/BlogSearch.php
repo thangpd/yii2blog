@@ -43,6 +43,7 @@ class BlogSearch extends BlogModel {
 		$dataProvider = new ActiveDataProvider( [
 			'query' => $query,
 		] );
+
 		$this->load( $params );
 
 		if ( ! $this->validate() ) {

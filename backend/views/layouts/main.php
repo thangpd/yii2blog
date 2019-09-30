@@ -38,7 +38,7 @@ AppAsset::register( $this );
 	] );
 	$menuItems = [
 		[ 'label' => 'Home', 'url' => [ '/site/index' ] ],
-		[ 'label' => 'Category', 'url' => [ '/category' ] ],
+		[ 'label' => 'Product', 'url' => [ '/product' ] ],
 		[ 'label' => 'Blog', 'url' => [ '/blog' ] ],
 	];
 	if ( Yii::$app->user->isGuest ) {

@@ -7,7 +7,7 @@ use yii\widgets\DetailView;
 /* @var $model backend\models\BlogModel */
 
 $this->title                   = $model->title;
-$this->params['breadcrumbs'][] = [ 'label' => 'Blogs', 'url' => [ 'index' ] ];
+$this->params['breadcrumbs'][] = [ 'label' => $model->getLabelName(), 'url' => [ 'index' ] ];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register( $this );
 ?>
@@ -32,6 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			'id',
 			'title',
 			'slug',
+			'post_type',
 			'description:ntext',
 			'content:ntext',
 			'category',

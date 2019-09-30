@@ -2,7 +2,9 @@
 
 namespace backend\controllers;
 
+use backend\models\Category;
 use backend\models\FileUpload;
+use common\abstracts\BlogControllerAbstract;
 use Yii;
 use backend\models\BlogModel;
 use backend\models\BlogSearch;
@@ -13,7 +15,7 @@ use yii\filters\VerbFilter;
 /**
  * BlogController implements the CRUD actions for Blog model.
  */
-class BlogController extends Controller {
+class BlogController extends BlogControllerAbstract {
 	/**
 	 * {@inheritdoc}
 	 */
@@ -28,131 +30,24 @@ class BlogController extends Controller {
 		];
 	}
 
-	/**
-	 * Lists all Blog models.
-	 * @return mixed
-	 */
-	public function actionIndex() {
-		$searchModel  = new BlogSearch();
-		$dataProvider = $searchModel->search( Yii::$app->request->queryParams );
-
-		return $this->render( 'index', [
-			'searchModel'  => $searchModel,
-			'dataProvider' => $dataProvider,
-		] );
+	public function getLabelName() {
+		return 'Blog';
+		// TODO: Implement getLabelName() method.
 	}
 
-	/**
-	 * Displays a single Blog model.
-	 *
-	 * @param integer $id
-	 *
-	 * @return mixed
-	 * @throws NotFoundHttpException if the model cannot be found
-	 */
-	public function actionView( $id ) {
-		$model = $this->findModel( $id );
-
-
-		return $this->render( 'view', [
-			'model' => $model,
-		] );
+	public function getModelName() {
+		return BlogModel::class;
+		// TODO: Implement getModelName() method.
 	}
 
-	/**
-	 * Creates a new Blog model.
-	 * If creation is successful, the browser will be redirected to the 'view' page.
-	 * @return mixed
-	 */
-	public function actionCreate() {
-
-		$model    = new BlogModel();
-		$upload   = new FileUpload();
-		$file_uri = $upload->uploadFile( $model, 'image_url' );
-
-
-		if ( $model->load( Yii::$app->request->post() ) ) {
-			if ( ! empty( $file_uri ) ) {
-				$model->image_url = $file_uri;
-			}
-			if ( $model->save() ) {
-				Yii::$app->session->addFlash( 'success', "Update succeed" );
-			}
-
-			return $this->redirect( [ 'view', 'id' => $model->id ] );
-		}
-
-
-		return $this->render( 'create', [
-			'model' => $model,
-		] );
+	public function postTypeCategory() {
+		return Category::class;
+		// TODO: Implement postTypeCategory() method.
 	}
 
-	/**
-	 * Updates an existing Blog model.
-	 * If update is successful, the browser will be redirected to the 'view' page.
-	 *
-	 * @param integer $id
-	 *
-	 * @return mixed
-	 * @throws NotFoundHttpException if the model cannot be found
-	 */
-	public function actionUpdate( $id ) {
-		$model  = $this->findModel( $id );
-		$upload = new FileUpload();
 
-		$file_uri = $upload->uploadFile( $model, 'image_url' );
-
-		if ( $model->load( Yii::$app->request->post() ) && $model->validate() ) {
-			if ( ! empty( $file_uri ) ) {
-				$model->image_url = $file_uri;
-			}
-			if ( $model->save() ) {
-				Yii::$app->session->addFlash( 'success', "Update succeed" );
-			}
-
-			return $this->redirect( [ 'view', 'id' => $model->id ] );
-		} else {
-			var_dump( $model->getErrors() );
-		}
-
-		return $this->render( 'update', [
-			'model' => $model,
-		] );
-	}
-
-	/**
-	 * Deletes an existing Blog model.
-	 * If deletion is successful, the browser will be redirected to the 'index' page.
-	 *
-	 * @param integer $id
-	 *
-	 * @return mixed
-	 * @throws NotFoundHttpException if the model cannot be found
-	 */
-	public function actionDelete( $id ) {
-		$model = $this->findModel( $id );
-		$model->delete();
-
-		FileUpload::deleteFile( $model, 'image_url' );
-
-		return $this->redirect( [ 'index' ] );
-	}
-
-	/**
-	 * Finds the Blog model based on its primary key value.
-	 * If the model is not found, a 404 HTTP exception will be thrown.
-	 *
-	 * @param integer $id
-	 *
-	 * @return BlogModel the loaded model
-	 * @throws NotFoundHttpException if the model cannot be found
-	 */
-	protected function findModel( $id ) {
-		if ( ( $model = BlogModel::findOne( $id ) ) !== null ) {
-			return $model;
-		}
-
-		throw new NotFoundHttpException( 'The requested page does not exist.' );
+	public function postTypeName() {
+		return 'blog';
+		// TODO: Implement postTypeName() method.
 	}
 }
