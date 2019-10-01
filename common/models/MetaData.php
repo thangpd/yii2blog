@@ -7,6 +7,20 @@
 namespace common\models;
 
 
-class MetaData {
+use yii\db\ActiveRecord;
+
+class MetaData extends ActiveRecord {
+
+
+	public function rules() {
+		return [
+			[ [ 'post_id', 'meta_key' ], 'required' ],
+			[ 'post_id', 'integer' ],
+			[ 'meta_key', 'trim' ],
+			[ 'meta_key', 'string' ],
+			[ 'meta_value', 'safe' ],
+		];
+	}
+
 
 }
