@@ -17,6 +17,9 @@ class ContactForm extends Model
     public $verifyCode;
 
 
+    const SCENARIO_TEST_FORM = 'test-form';
+
+
     /**
      * {@inheritdoc}
      */
@@ -29,6 +32,7 @@ class ContactForm extends Model
             ['email', 'email'],
             // verifyCode needs to be entered correctly
             ['verifyCode', 'captcha'],
+            [['name', 'email'], 'required', 'on' => self::SCENARIO_TEST_FORM],
         ];
     }
 
@@ -46,16 +50,17 @@ class ContactForm extends Model
      * Sends an email to the specified email address using the information collected by this model.
      *
      * @param string $email the target email address
+     *
      * @return bool whether the email was sent
      */
     public function sendEmail($email)
     {
         return Yii::$app->mailer->compose()
-            ->setTo($email)
-            ->setFrom([Yii::$app->params['senderEmail'] => Yii::$app->params['senderName']])
-            ->setReplyTo([$this->email => $this->name])
-            ->setSubject($this->subject)
-            ->setTextBody($this->body)
-            ->send();
+                                ->setTo($email)
+                                ->setFrom([Yii::$app->params['senderEmail'] => Yii::$app->params['senderName']])
+                                ->setReplyTo([$this->email => $this->name])
+                                ->setSubject($this->subject)
+                                ->setTextBody($this->body)
+                                ->send();
     }
 }

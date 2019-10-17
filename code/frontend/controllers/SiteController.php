@@ -1,4 +1,5 @@
 <?php
+
 namespace frontend\controllers;
 
 use frontend\models\ResendVerificationEmailForm;
@@ -14,6 +15,8 @@ use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
+use yii\web\Response;
+use yii\widgets\ActiveForm;
 
 /**
  * Site controller
@@ -26,7 +29,7 @@ class SiteController extends Controller
     public function behaviors()
     {
         return [
-            'access' => [
+            /*'access' => [
                 'class' => AccessControl::className(),
                 'only' => ['logout', 'signup'],
                 'rules' => [
@@ -41,13 +44,13 @@ class SiteController extends Controller
                         'roles' => ['@'],
                     ],
                 ],
-            ],
-            'verbs' => [
+            ],*/
+            /*'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'logout' => ['post'],
                 ],
-            ],
+            ],*/
         ];
     }
 
@@ -57,11 +60,11 @@ class SiteController extends Controller
     public function actions()
     {
         return [
-            'error' => [
+            'error'   => [
                 'class' => 'yii\web\ErrorAction',
             ],
             'captcha' => [
-                'class' => 'yii\captcha\CaptchaAction',
+                'class'           => 'yii\captcha\CaptchaAction',
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
             ],
         ];
@@ -84,7 +87,7 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
-        if (!Yii::$app->user->isGuest) {
+        if ( ! Yii::$app->user->isGuest) {
             return $this->goHome();
         }
 
@@ -122,7 +125,8 @@ class SiteController extends Controller
         $model = new ContactForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->sendEmail(Yii::$app->params['adminEmail'])) {
-                Yii::$app->session->setFlash('success', 'Thank you for contacting us. We will respond to you as soon as possible.');
+                Yii::$app->session->setFlash('success',
+                    'Thank you for contacting us. We will respond to you as soon as possible.');
             } else {
                 Yii::$app->session->setFlash('error', 'There was an error sending your message.');
             }
@@ -134,6 +138,32 @@ class SiteController extends Controller
             ]);
         }
     }
+
+    public function actionValidateForm()
+    {
+
+        if (\Yii::$app->request->isAjax) {
+            \Yii::$app->response->format = Response::FORMAT_JSON;
+            $get                         = \Yii::$app->request->get();
+            $model                       = new ContactForm(['scenario'=>$get['scenarios']]);
+            if (isset($get['scenarios'])) {
+//                $model->scenario = $get['scenarios'];
+                $model->validate();
+                echo '<pre>';
+                print_r($model->getErrors());
+                echo '</pre>';die;
+            }
+            $post = \Yii::$app->request->post();
+
+            if ($model->load($post)) {
+                return ActiveForm::validate($model);
+            }
+
+
+            return [];
+        }
+    }
+
 
     /**
      * Displays about page.
@@ -154,7 +184,9 @@ class SiteController extends Controller
     {
         $model = new SignupForm();
         if ($model->load(Yii::$app->request->post()) && $model->signup()) {
-            Yii::$app->session->setFlash('success', 'Thank you for registration. Please check your inbox for verification email.');
+            Yii::$app->session->setFlash('success',
+                'Thank you for registration. Please check your inbox for verification email.');
+
             return $this->goHome();
         }
 
@@ -177,7 +209,8 @@ class SiteController extends Controller
 
                 return $this->goHome();
             } else {
-                Yii::$app->session->setFlash('error', 'Sorry, we are unable to reset password for the provided email address.');
+                Yii::$app->session->setFlash('error',
+                    'Sorry, we are unable to reset password for the provided email address.');
             }
         }
 
@@ -190,6 +223,7 @@ class SiteController extends Controller
      * Resets password.
      *
      * @param string $token
+     *
      * @return mixed
      * @throws BadRequestHttpException
      */
@@ -216,6 +250,7 @@ class SiteController extends Controller
      * Verify email address
      *
      * @param string $token
+     *
      * @throws BadRequestHttpException
      * @return yii\web\Response
      */
@@ -229,11 +264,13 @@ class SiteController extends Controller
         if ($user = $model->verifyEmail()) {
             if (Yii::$app->user->login($user)) {
                 Yii::$app->session->setFlash('success', 'Your email has been confirmed!');
+
                 return $this->goHome();
             }
         }
 
         Yii::$app->session->setFlash('error', 'Sorry, we are unable to verify your account with provided token.');
+
         return $this->goHome();
     }
 
@@ -248,9 +285,11 @@ class SiteController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->sendEmail()) {
                 Yii::$app->session->setFlash('success', 'Check your email for further instructions.');
+
                 return $this->goHome();
             }
-            Yii::$app->session->setFlash('error', 'Sorry, we are unable to resend verification email for the provided email address.');
+            Yii::$app->session->setFlash('error',
+                'Sorry, we are unable to resend verification email for the provided email address.');
         }
 
         return $this->render('resendVerificationEmail', [
