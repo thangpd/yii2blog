@@ -22,13 +22,15 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="row">
         <div class="col-lg-5">
             <?php $form = ActiveForm::begin([
-                'id'                   => 'contact-form',
+//                'id'                   => 'contact-form',
 //                'method'               => 'get',
-                'enableAjaxValidation' => true,
-                'validationUrl'        => \yii\helpers\Url::toRoute([
-                    '/site/validate-form',
+                'enableClientValidation' => true,
+                'enableAjaxValidation'   => true,
+                'options'                => ['class' => 'form-contact']
+//                'validationUrl'        => \yii\helpers\Url::toRoute([
+//                    '/site/validate-form',
 //                    'scenarios' => \frontend\models\ContactForm::SCENARIO_TEST_FORM,
-                ]),
+//                ]),
             ]); ?>
 
             <?= $form->field($model, 'name')->textInput(['autofocus' => true]) ?>
@@ -39,9 +41,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
             <?= $form->field($model, 'body')->textarea(['rows' => 6]) ?>
 
-            <?= $form->field($model, 'verifyCode')->widget(Captcha::className(), [
-                'template' => '<div class="row"><div class="col-lg-3">{image}</div><div class="col-lg-6">{input}</div></div>',
-            ]) ?>
 
             <div class="form-group">
                 <?= Html::submitButton('Submit', ['class' => 'btn btn-primary', 'name' => 'contact-button']) ?>
@@ -52,3 +51,34 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 
 </div>
+
+<?php
+$script = <<< JS
+
+$('body').on('beforeSubmit', '.form-contact', function (e) {
+    
+     e.preventDefault();
+    
+     var form = $(this);
+     // return false if form still have some validation errors
+     if (form.find('.has-error').length) {
+          return false;
+     }
+     // submit form
+     $.ajax({
+          url: form.attr('action'),
+          type: 'post',
+          data: form.serialize(),
+          success: function (response) {
+               // do something with response
+          }
+     });
+     return false;
+});
+
+JS;
+
+$this->registerJS($script, yii\web\View::POS_END);
+?>
+
+

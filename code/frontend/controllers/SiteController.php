@@ -29,28 +29,28 @@ class SiteController extends Controller
     public function behaviors()
     {
         return [
-            /*'access' => [
+            'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout', 'signup'],
+                'only'  => ['logout', 'signup'],
                 'rules' => [
                     [
                         'actions' => ['signup'],
-                        'allow' => true,
-                        'roles' => ['?'],
+                        'allow'   => true,
+                        'roles'   => ['?'],
                     ],
                     [
                         'actions' => ['logout'],
-                        'allow' => true,
-                        'roles' => ['@'],
+                        'allow'   => true,
+                        'roles'   => ['@'],
                     ],
                 ],
-            ],*/
-            /*'verbs' => [
-                'class' => VerbFilter::className(),
+            ],
+            'verbs'  => [
+                'class'   => VerbFilter::className(),
                 'actions' => [
                     'logout' => ['post'],
                 ],
-            ],*/
+            ],
         ];
     }
 
@@ -122,8 +122,10 @@ class SiteController extends Controller
      */
     public function actionContact()
     {
-        $model = new ContactForm();
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+        $model           = new ContactForm();
+        $model->scenario = ContactForm::SCENARIO_TEST_FORM;
+        $post            = Yii::$app->request->post();
+        if ($model->load($post) && $model->validate()) {
             if ($model->sendEmail(Yii::$app->params['adminEmail'])) {
                 Yii::$app->session->setFlash('success',
                     'Thank you for contacting us. We will respond to you as soon as possible.');
@@ -141,17 +143,12 @@ class SiteController extends Controller
 
     public function actionValidateForm()
     {
-
         if (\Yii::$app->request->isAjax) {
             \Yii::$app->response->format = Response::FORMAT_JSON;
             $get                         = \Yii::$app->request->get();
-            $model                       = new ContactForm(['scenario'=>$get['scenarios']]);
+            $model                       = new ContactForm(['scenario' => $get['scenarios']]);
             if (isset($get['scenarios'])) {
-//                $model->scenario = $get['scenarios'];
-                $model->validate();
-                echo '<pre>';
-                print_r($model->getErrors());
-                echo '</pre>';die;
+                $model->scenario = $get['scenarios'];
             }
             $post = \Yii::$app->request->post();
 
@@ -159,21 +156,11 @@ class SiteController extends Controller
                 return ActiveForm::validate($model);
             }
 
-
             return [];
         }
     }
 
 
-    /**
-     * Displays about page.
-     *
-     * @return mixed
-     */
-    public function actionAbout()
-    {
-        return $this->render('about');
-    }
 
     /**
      * Signs user up.

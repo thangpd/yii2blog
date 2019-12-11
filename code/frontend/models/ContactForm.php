@@ -18,6 +18,7 @@ class ContactForm extends Model
 
 
     const SCENARIO_TEST_FORM = 'test-form';
+    const SCENARIO_TEST_FORM_TEST = 'test-form-test';
 
 
     /**
@@ -27,11 +28,11 @@ class ContactForm extends Model
     {
         return [
             // name, email, subject and body are required
-            [['name', 'email', 'subject', 'body'], 'required'],
+            [['name', 'email', 'subject', 'body'], 'required','on'=> parent::SCENARIO_DEFAULT],
             // email has to be a valid email address
             ['email', 'email'],
             // verifyCode needs to be entered correctly
-            ['verifyCode', 'captcha'],
+            ['verifyCode', 'captcha','on'=> parent::SCENARIO_DEFAULT],
             [['name', 'email'], 'required', 'on' => self::SCENARIO_TEST_FORM],
         ];
     }
