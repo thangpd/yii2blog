@@ -1,0 +1,12 @@
+
+
+RewriteEngine On
+
+RewriteRule ^(frontend|backend)/web/ - [L]
+
+
+RewriteRule ^admin(/(.*))?$ /backend/web/$2  [S=1]
+
+
+RewriteRule .* /frontend/web/$0 [L]
+
